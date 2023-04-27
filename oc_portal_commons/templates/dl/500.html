@@ -1,0 +1,10 @@
+{% extends "dl/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Server error occured' %}{% endblock %}
+
+{% block content %}
+<h1>{% trans 'Internal server error' %}</h1>
+<p>{% trans "There's been an error. It's been reported to the site administrators via email and should be fixed soon. Thanks for your patience." %}</p>
+
+{% endblock %}

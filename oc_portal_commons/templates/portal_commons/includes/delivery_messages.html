@@ -1,0 +1,14 @@
+{% load custom_tags %}
+
+
+{% block delivery_messages  %}
+{% with delivery_messages=delivery|get_delivery_messages:messages %}
+{% if delivery_messages %}
+<ul class="messagelist">
+  {% for message in delivery_messages %}
+  <li {% if message.tags %} class="{{ message.level_tag }}"{% endif %}>{{ message|capfirst }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}

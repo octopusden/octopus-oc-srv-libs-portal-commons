@@ -1,0 +1,72 @@
+body.no_sidebar div#sidebar,
+div#banner {
+    display: none;
+}
+
+div#main-content {
+    display: table;
+}
+
+div#sidebar {
+    padding-left: 10px;
+    width: 250px;
+    /* float: left; */
+    display: table-cell;
+    height: 100%;
+}
+
+div#message_block {
+    border: solid 1px black;
+}
+
+div#message_block[level="error"] {
+    background: red;
+}
+
+/* ul#errorlist{ */
+/*     list-style: square; */
+/* } */
+
+td.td-actions {
+    white-space: nowrap;
+}
+
+table#clients_list {
+    position: inherit;
+    border: none;
+}
+
+body.with_sidebar div#sidebar {
+}
+
+body.with_banner div#banner {
+    display: block;
+}
+
+body.right_sidebar div#sidebar {
+    float: right;
+}
+
+input.dl_action {
+    font: bold Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    border-radius: 1px;
+}
+
+/* style for search */
+.search_form_layout td {
+    vertical-align: middle;
+    text-align: left;
+}
+
+span.searched_file {
+    background: yellow;
+}
+
