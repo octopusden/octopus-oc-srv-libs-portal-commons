@@ -32,7 +32,7 @@ except:
     AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jj6k2jv9djykyg^heo+a8r904dwv6u_z+8*&1co)mcb89i(sk1'
+SECRET_KEY = 'SECRET_KEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get("DJANGO_DEBUG_MODE", "") == "True")
