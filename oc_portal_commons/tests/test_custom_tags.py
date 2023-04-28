@@ -1,3 +1,4 @@
+from . import django_settings
 from django import test
 from oc_delivery_apps.dlmanager.models import Delivery
 from oc_portal_commons.templatetags import custom_tags
