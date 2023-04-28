@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from . import django_settings
 import pytz
 from oc_delivery_apps.checksums.models import CiRegExp, CiTypes, CiTypeGroups, LocTypes, CiTypeIncs
 from oc_portal_commons import forms
@@ -158,8 +159,8 @@ class DeliverySearchTestCase(test.TestCase):
 
     def assert_filtered(self, expected_ids, filter_output):
         expected_deliveries = []
-        for id in expected_ids:
-            expected_deliveries.append(self.all_deliveries[id])
+        for _id in expected_ids:
+            expected_deliveries.append(self.all_deliveries[_id])
         # filter output may contain additional fields
         filtered_deliveries = Delivery.objects.filter(pk__in=filter_output.values_list("pk", flat=True))
         self.assertCountEqual(expected_deliveries, filtered_deliveries)
@@ -174,8 +175,8 @@ class DeliverySearchTestCase(test.TestCase):
             filters["component_0"] = "FILE"  # component_0 is always specified
         filters.update(kwargs)
         default_queryset = Delivery.objects.order_by('-creation_date')
-        filter = forms.DeliveryFormFilter(filters, queryset=default_queryset)
-        return filter.qs.all()
+        _filter = forms.DeliveryFormFilter(filters, queryset=default_queryset)
+        return _filter.qs.all()
 
     def search_component_deliveries(self, component_code):
         filtered = self.search_deliveries(component_0=component_code,

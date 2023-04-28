@@ -45,17 +45,12 @@ setup(name="oc_portal_commons",
       long_description_content_type="text/plain",
       install_requires=[
           "oc-delivery-apps >= 11.2.8",
-          "packaging <= 21.3",
+          "packaging",
           "pyparsing == 2.4.0",
           "django-jquery", 
           "django-tests",
-          "django-simple-history",
           "django-filter",
-          "oc-cdtapi",
           "fs",
-          "configobj",
-          "django",
-          "django-simple-history == 3.0.0",
           "mock"
       ],
 

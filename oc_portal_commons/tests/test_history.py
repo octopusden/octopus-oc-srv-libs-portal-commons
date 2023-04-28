@@ -1,5 +1,6 @@
 import datetime
 import os
+from . import django_settings
 
 import pytz
 import django

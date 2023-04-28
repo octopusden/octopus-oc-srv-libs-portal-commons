@@ -86,8 +86,8 @@ class DeliveryFormFilter(django_filters.FilterSet):
     # default format uses slashes as delimiters
     # if format is "invalid" then nothing is returned
     # custom filter method is not called at all
-    #date_range.field.fields[0].input_formats = ["%d-%m-%Y"]
-    #date_range.field.fields[1].input_formats = ["%d-%m-%Y"]
+    date_range.field.fields[0].input_formats = ["%d-%m-%Y"]
+    date_range.field.fields[1].input_formats = ["%d-%m-%Y"]
     is_failed = django_filters.BooleanFilter(field_name='flag_failed')
     is_approved = django_filters.BooleanFilter(field_name='flag_approved')
     is_uploaded = django_filters.BooleanFilter(field_name='flag_uploaded')
