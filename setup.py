@@ -60,5 +60,5 @@ setup(name="oc_portal_commons",
                              + list_recursive("oc_portal_commons", "static")),
       },
 
-      test_suite="portal_commons.test.runtests.execute_test_suite",
+      test_suite="oc_portal_commons.test.runtests.execute_test_suite",
       )

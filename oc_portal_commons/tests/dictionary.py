@@ -133,7 +133,7 @@ def fill_dict( o_apps = None, o_sched = None ):
     # CI_REGEXP
     check_create_CI_REGEXP=lambda *args: check_create_app_CI_REGEXP(o_apps, *args)
     check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"FILE", "regexp": ".+:zip$" } )
-    check_create_CI_REGEXP( { "loc_type":"SMB", "ci_type":"FILE", "regexp": ".+\.sql$" } )
+    check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"SQL", "regexp": ".+sql" } )
     return
 
 def main():

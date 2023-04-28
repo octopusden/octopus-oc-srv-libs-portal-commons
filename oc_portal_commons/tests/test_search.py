@@ -24,7 +24,7 @@ class DeliverySearchTestCase(test.TestCase):
         # 0:
         self.add_delivery()
         # 1:
-        self.add_delivery(a="TEST-1", da="person",
+        self.add_delivery(a="TEST-1", v="0.0.1",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -33,7 +33,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 2:
-        self.add_delivery(a="TEST-2", da="person",
+        self.add_delivery(a="TEST-2", v="0.0.2",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -42,7 +42,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 3:
-        self.add_delivery(a="TEST-3", da="person",
+        self.add_delivery(a="TEST-3", v="0.0.3",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -51,16 +51,16 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 4:
-        self.add_delivery(a="TEST-4", d="2022-06-06 12:00:00", da="person",
+        self.add_delivery(a="TEST-4", d="2022-06-06 12:00:00", da="person", v="0.0.4",
                           comment="test comment",
                           fl=["/tmp/work/data",
-                              "some file with spaces",
+                              "something.sql",
                               "com.example.app:distribution:2.2.2:zip",
                               "com.example.app.branches-int.apps:distribution:2.6.684-22:war",
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 5:
-        self.add_delivery(a="TEST_US-5", d="2022-06-12 12:00:00", da="person",
+        self.add_delivery(a="TEST_US-5", d="2022-06-12 12:00:00", da="person", v="0.0.5",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -69,7 +69,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 6:
-        self.add_delivery(a="BEST-6", da="person",
+        self.add_delivery(a="BEST-6", da="person", v="0.0.6",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -78,7 +78,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 7:
-        self.add_delivery(a="BEST-7", da="person",
+        self.add_delivery(a="BEST-7", da="person", v="0.0.7",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -87,7 +87,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 8:
-        self.add_delivery(a="TEST-YY-8", da="person",
+        self.add_delivery(a="TEST-YY-8", da="person", v="0.0.8",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -96,7 +96,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 9:
-        self.add_delivery(a="TEST-YY-9", da="person",
+        self.add_delivery(a="TEST-YY-9", da="person", v="0.0.9",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -105,7 +105,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 10:
-        self.add_delivery(a="TEST-10", da="person",
+        self.add_delivery(a="TEST-10", da="person", v="0.1.0",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -114,7 +114,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 11:
-        self.add_delivery(a="TEST-11", da="person",
+        self.add_delivery(a="TEST-11", da="person", v="0.1.1",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -293,23 +293,23 @@ class DateSearchTestSuite(DeliverySearchTestCase):
         filtered = self.search_deliveries(component_0="SQL",
                                           component_1="",
                                           date_range_after="01-01-2022",
-                                          date_range_before="10-01-2022", )
+                                          date_range_before="10-11-2022", )
         self.assert_filtered([4, ], filtered)
 
 
 class AuthorSearchTestSuite(DeliverySearchTestCase):
 
-    def _est_created_by_beginning(self):
+    def test_created_by_beginning(self):
         filtered = self.search_deliveries(created_by="aut")
-        self.assert_filtered([0, 2, 3, 4, 5], filtered)
+        self.assert_filtered([0, 1, 2, 3], filtered)
 
-    def _est_created_by_full(self):
+    def test_created_by_full(self):
         filtered = self.search_deliveries(created_by="author")
-        self.assert_filtered([0, 2, 4, 5], filtered)
+        self.assert_filtered([0, 1, 2, 3], filtered)
 
-    def _est_partial_created_by(self):
+    def test_partial_created_by(self):
         filtered = self.search_deliveries(created_by="utho")
-        self.assert_filtered([0, 2, 4, 5], filtered)
+        self.assert_filtered([0, 1, 2, 3], filtered)
 
 
 class CommentSearchTestSuite(DeliverySearchTestCase):
