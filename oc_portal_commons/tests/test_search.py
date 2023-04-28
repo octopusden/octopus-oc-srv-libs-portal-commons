@@ -25,7 +25,7 @@ class DeliverySearchTestCase(test.TestCase):
         self.add_delivery()
         # 1:
         self.add_delivery(a="TEST-1", v="0.0.1",
-                          comment="test comment",
+                          comment="weird comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
                               "com.example.app:distribution:2.2.2:zip",
@@ -34,7 +34,7 @@ class DeliverySearchTestCase(test.TestCase):
                               ])
         # 2:
         self.add_delivery(a="TEST-2", v="0.0.2",
-                          comment="test comment",
+                          comment="specificcomment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
                               "com.example.app:distribution:2.2.2:zip",
@@ -43,7 +43,7 @@ class DeliverySearchTestCase(test.TestCase):
                               ])
         # 3:
         self.add_delivery(a="TEST-3", v="0.0.3",
-                          comment="test comment",
+                          comment="",
                           fl=["/tmp/work/data",
                               "some file with spaces",
                               "com.example.app:distribution:2.2.2:zip",
@@ -314,17 +314,20 @@ class AuthorSearchTestSuite(DeliverySearchTestCase):
 
 class CommentSearchTestSuite(DeliverySearchTestCase):
 
-    def _est_search_by_comment(self):
-        filtered = self.search_deliveries(comment="comment")
-        self.assert_filtered([1, 2, 3, 4, ], filtered)
+    def test_search_by_comment(self):
+        self.maxDiff = None
+        filtered = self.search_deliveries(comment="specificcomment")
+        self.assert_filtered([2], filtered)
 
-    def _est_search_by_comment_with_space(self):
-        filtered = self.search_deliveries(comment="test comment")
-        self.assert_filtered([1, 4, ], filtered)
+    def test_search_by_comment_with_space(self):
+        self.maxDiff = None
+        filtered = self.search_deliveries(comment="weird comment")
+        self.assert_filtered([1], filtered)
 
-    def _est_search_by_empty_comment(self):
+    def test_search_by_empty_comment(self):
+        self.maxDiff = None
         filtered = self.search_deliveries(comment="")
-        self.assert_filtered([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ], filtered)
+        self.assert_filtered([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], filtered)
 
 
 class ContentSearchTestSuite(DeliverySearchTestCase):
@@ -436,14 +439,12 @@ class GroupSearchTestSuite(DeliverySearchTestCase):
         CiTypes(code="FILE", name="FILE").save()
         self.at_nexus, _ = LocTypes.objects.get_or_create(code="NXS", name="NXS")
 
-    # missing group is the same as missing component - tested above
-    # def _est_missing_group_skipped(self):
 
-    def _est_empty_group_processed(self):
+    def test_empty_group_processed(self):
         CiTypeGroups(code="TEST", name="TEST").save()
         self.assert_filtered([], self.search_component_deliveries("TEST"))
 
-    def _est_group_without_regexps_processed(self):
+    def test_group_without_regexps_processed(self):
         citype1, _ = CiTypes.objects.get_or_create(code="test1", name="test1")
         group, _ = CiTypeGroups.objects.get_or_create(code="TEST", name="TEST")
         CiTypeIncs(ci_type_group=group, ci_type=citype1).save()
@@ -465,7 +466,7 @@ class GroupSearchTestSuite(DeliverySearchTestCase):
         self.add_delivery(a="2", fl=["c.b.c"], pk=2)
         self.assert_filtered([0, 1], self.search_component_deliveries("TEST"))
 
-    def _est_group_code_prevails_component(self):
+    def test_group_code_prevails_component(self):
         citype1, _ = CiTypes.objects.get_or_create(code="test1", name="test1")
         CiRegExp(loc_type=self.at_nexus, ci_type=citype1, regexp="^a.+$").save()
         group, _ = CiTypeGroups.objects.get_or_create(code="TEST", name="TEST")
@@ -481,7 +482,7 @@ class GroupSearchTestSuite(DeliverySearchTestCase):
 
 class StatusSearchTestSuite(DeliverySearchTestCase):
 
-    def _est_delivery_is_approved_search(self):
+    def test_delivery_is_approved_search(self):
         Delivery.objects.all().delete()
         self.add_delivery(is_approved=True, v="v20010101")  # 12
         self.add_delivery(v="v20011111")  # 13
@@ -489,14 +490,14 @@ class StatusSearchTestSuite(DeliverySearchTestCase):
         filtered = self.search_deliveries(is_approved=True)
         self.assert_filtered([12, 14], filtered)
 
-    def _est_delivery_is_not_approved_search(self):
+    def test_delivery_is_not_approved_search(self):
         self.add_delivery(is_approved=True, v="v20010101")  # 12
         self.add_delivery(v="v20011111")  # 13
         self.add_delivery(is_approved=True, v="v20020202")  # 14
         filtered = self.search_deliveries(is_approved=False)
         self.assert_filtered([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13], filtered)
 
-    def _est_delivery_is_uploaded_search(self):
+    def test_delivery_is_uploaded_search(self):
         self.add_delivery(is_approved=True, is_uploaded=True, v="v20010101")  # 12
         self.add_delivery(v="v20011111")  # 13
         self.add_delivery(is_approved=True, v="v20020202")  # 14
@@ -504,7 +505,7 @@ class StatusSearchTestSuite(DeliverySearchTestCase):
         print(filtered)
         self.assert_filtered([12], filtered)
 
-    def _est_delivery_is_failed_search(self):
+    def test_delivery_is_failed_search(self):
         self.add_delivery(is_approved=True, is_uploaded=True, v="v20010101")  # 12
         self.add_delivery(is_approved=True, is_uploaded=True, is_failed=True, v="v20011111")  # 13
         self.add_delivery(is_approved=True, v="v20020202")  # 14
@@ -514,6 +515,3 @@ class StatusSearchTestSuite(DeliverySearchTestCase):
     
 
 
-# is_approved=False, 
-#                      is_uploaded=False, 
-#                      is_failed=False
