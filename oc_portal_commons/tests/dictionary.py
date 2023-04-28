@@ -108,6 +108,7 @@ def fill_dict( o_apps = None, o_sched = None ):
     include_ci_types = lambda *args: include_app_ci_types( o_apps, *args )
 
     check_create_CI_TYPES( { "code":"FILE", "name":"Any regular file", "is_standard":"N" } )
+    check_create_CI_TYPES( { "code":"SQL", "name":"Any sql file", "is_standard":"N" } )
 
     # groups:
     check_create_CI_TYPE_GROUPS( { "code":"FILE", "name" : "General Files" } )
@@ -131,7 +132,8 @@ def fill_dict( o_apps = None, o_sched = None ):
 
     # CI_REGEXP
     check_create_CI_REGEXP=lambda *args: check_create_app_CI_REGEXP(o_apps, *args)
-    check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"FILE", "regexp": "\.+:zip" } )
+    check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"FILE", "regexp": ".+:zip$" } )
+    check_create_CI_REGEXP( { "loc_type":"SMB", "ci_type":"FILE", "regexp": ".+\.sql$" } )
     return
 
 def main():

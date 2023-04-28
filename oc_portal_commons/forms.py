@@ -34,12 +34,17 @@ class ComponentWidget(forms.MultiWidget):
             return ["", ""]
 
     def value_from_datadict(self, data, files, name):
+        print ("\n\nCOMPONENT0 [%s]" % data.get ('component_0') )
+        print ("\n\nCOMPONENT1 [%s]" % data.get ('component_1') )
+        print ("\n\n")
         component_type = data.get('component_0', "FILE")
         file_or_version = data.get('component_1', "")
         # "file" type without path means no filter set
         if component_type == "FILE" and not file_or_version:
             return ""
-        return " ".join([component_type, file_or_version])
+        ret = " ".join([component_type, file_or_version])
+        print ("About to return [%s]" % ret)
+        return ret
 
     def format_output(self, rendered_widgets):
         return ' '.join(rendered_widgets)
@@ -82,7 +87,7 @@ class DeliveryFormFilter(django_filters.FilterSet):
         lookup_expr='icontains',
         widget=ComponentWidget,  # no instantiation because we need to dynamically load dropdown list
         method="process_component_info")
-    date_range = django_filters.filters.DateFromToRangeFilter(field_name="creation_date")
+    date_range = django_filters.DateFromToRangeFilter(field_name="creation_date")
     # default format uses slashes as delimiters
     # if format is "invalid" then nothing is returned
     # custom filter method is not called at all
@@ -104,6 +109,7 @@ class DeliveryFormFilter(django_filters.FilterSet):
         return found_deliveries
 
     def process_component_info(self, queryset, name, value):
+        print ("\n\n\n !!!!!!!!!!!!!!!!!! \n\n [%s] \n\n !!!!!!!!!!!!!!!!!!!!!" % value)
         component_type, file_or_version = value.split(' ', 1)
 
         if component_type == "FILE":  # plain filename specified - find it in delivery lists

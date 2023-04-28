@@ -60,7 +60,7 @@ class DeliverySearchTestCase(test.TestCase):
                               "com.example.app:distribution:1.0.93:war",
                               ])
         # 5:
-        self.add_delivery(a="TEST_US-5", da="person",
+        self.add_delivery(a="TEST_US-5", d="2022-06-12 12:00:00", da="person",
                           comment="test comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
@@ -168,7 +168,7 @@ class DeliverySearchTestCase(test.TestCase):
     def search_deliveries(self, **kwargs):
         filters = {}
         filter_args = ["project", "component_0", "component_1",
-                       "date_range_0", "date_range_1", "created_by",
+                       "date_range_after", "date_range_before", "created_by",
                        "comment", "is_failed", "is_approved", "is_uploaded"]
         if any([(item in filter_args) for item in kwargs.keys()]):
             filters.update({item: "" for item in filter_args})
@@ -241,53 +241,60 @@ class DeliveryNameSearchTestSuite(DeliverySearchTestCase):
 class DateSearchTestSuite(DeliverySearchTestCase):
 
     def test_wide_date_range(self):
-        filtered = self.search_deliveries(date_range_0="01-01-2010",
-                                          date_range_1="01-01-zxzx")
+        filtered = self.search_deliveries(date_range_after="01-01-2010",
+                                          date_range_before="01-01-2030")
         self.assert_filtered([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ], filtered)
 
+
     def test_one_day_range(self):
-        self.maxDiff = None
-        filtered = self.search_deliveries(date_range_0="01-01-2010",
-                                          date_range_1="01-01-2010")
-        print ("count is [%s]" % len (filtered) )
-        for d in filtered:
-            print (d.creation_date)
+        self.maxDiff = None   
+        filtered = self.search_deliveries(date_range_after="06-06-2022",
+                                          date_range_before="06-06-2022")
         self.assert_filtered([4 ], filtered)
 
-    def _est_month_range(self):
-        filtered = self.search_deliveries(date_range_0="01-12-2016",
-                                          date_range_1="01-01-2017")
-        self.assert_filtered([0, 1, 2], filtered)
 
-    def _est_invalid_range(self):
-        filtered = self.search_deliveries(date_range_0="01-12-2016",
-                                          date_range_1="01-01-2015")
+    def test_month_range(self):
+        self.maxDiff = None
+        filtered = self.search_deliveries(date_range_after="01-06-2022",
+                                          date_range_before="30-06-2022")
+        self.assert_filtered([4, 5], filtered)
+
+
+    def test_invalid_range(self):
+        filtered = self.search_deliveries(date_range_after="01-12-2016",
+                                          date_range_before="01-01-2015")
         self.assert_filtered([], filtered)
 
-    def _est_date_from_not_set(self):
-        filtered = self.search_deliveries(date_range_1="05-12-2016")
-        self.assert_filtered([0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, ], filtered)
 
-    def _est_date_to_not_set(self):
-        filtered = self.search_deliveries(date_range_0="05-12-2016")
-        self.assert_filtered([0, 1, 2], filtered)
+    def test_date_after_not_set(self):
+        filtered = self.search_deliveries(date_range_before="01-12-2022")
+        self.assert_filtered([4, 5 ], filtered)
 
-    def _est_date_invalid_no_dashes(self):
-        filtered = self.search_deliveries(date_range_0="01012010",
-                                          date_range_1="01012030")
-        self.assert_filtered([], filtered)
 
-    def _est_date_invalid_not_digits(self):
-        filtered = self.search_deliveries(date_range_0="01-JAN-2010",
-                                          date_range_1="01-FEB-2030")
-        self.assert_filtered([], filtered)
+    def test_date_before_not_set(self):
+        filtered = self.search_deliveries(date_range_after="01-12-2022")
+        self.assert_filtered([0, 1, 2, 3, 6, 7, 8, 9, 10, 11, ], filtered)
 
-    def _est_type_and_date_specified(self):
-        filtered = self.search_deliveries(component_0="CPBDSTR",
+
+    def test_date_invalid_no_dashes(self):
+        filtered = self.search_deliveries(date_range_after="01012010",
+                                          date_range_before="01012030")
+        self.assert_filtered([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ], filtered)
+
+
+    def test_date_invalid_not_digits(self):
+        self.maxDiff = None
+        filtered = self.search_deliveries(date_range_after="01-JAN-2010",
+                                          date_range_before="01-FEB-2030")
+        self.assert_filtered([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ], filtered)
+
+
+    def test_type_and_date_specified(self):
+        filtered = self.search_deliveries(component_0="SQL",
                                           component_1="",
-                                          date_range_0="01-10-2016",
-                                          date_range_1="15-10-2016", )
-        self.assert_filtered([3, ], filtered)
+                                          date_range_after="01-01-2022",
+                                          date_range_before="10-01-2022", )
+        self.assert_filtered([4, ], filtered)
 
 
 class AuthorSearchTestSuite(DeliverySearchTestCase):
