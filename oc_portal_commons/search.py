@@ -11,12 +11,12 @@ def resolve_search_components(code):
     """
     try:
         group = CiTypeGroups.objects.get(code=code)
-        components_codes = [inclusion.ci_type.code
+        components = [inclusion.ci_type
                             for inclusion in CiTypeIncs.objects.filter(ci_type_group=group)]
-        components = map(Component.get_component, components_codes)
+        components = list(map(lambda x: Component(x), components))
     except CiTypeGroups.DoesNotExist:
         try:
-            components = [Component.get_component(code), ]
+            components = [Component(CiTypes.objects.get(code=code)),]
         except (KeyError, CiTypes.DoesNotExist):  # wrong type - nothing can be found
             raise SearchError("Cannot resolve request code to search: " + code)
     return components
