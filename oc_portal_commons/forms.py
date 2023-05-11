@@ -39,7 +39,8 @@ class ComponentWidget(forms.MultiWidget):
         # "file" type without path means no filter set
         if component_type == "FILE" and not file_or_version:
             return ""
-        return " ".join([component_type, file_or_version])
+        ret = " ".join([component_type, file_or_version])
+        return ret
 
     def format_output(self, rendered_widgets):
         return ' '.join(rendered_widgets)
@@ -81,8 +82,9 @@ class DeliveryFormFilter(django_filters.FilterSet):
         field_name="mf_delivery_files_specified",
         lookup_expr='icontains',
         widget=ComponentWidget,  # no instantiation because we need to dynamically load dropdown list
-        method="process_component_info")
-    date_range = django_filters.filters.DateFromToRangeFilter(field_name="creation_date")
+        method="process_component_info",
+        strip=False)
+    date_range = django_filters.DateFromToRangeFilter(field_name="creation_date")
     # default format uses slashes as delimiters
     # if format is "invalid" then nothing is returned
     # custom filter method is not called at all

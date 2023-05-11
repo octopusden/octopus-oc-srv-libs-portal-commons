@@ -6,19 +6,7 @@ import sys
 from setuptools import setup, find_packages
 from datetime import datetime
 
-def dynamic_version(str_version):
-    """
-    Returns full version of a package
-    :param str_version: string, package version to append
-    :return: str_version with appended build_id
-    """
-
-    if "bdist_rpm" in sys.argv:
-        raise NotImplementedError("RPM build is no more supported")
- 
-    str_bid = datetime.strftime( datetime.now(), "%Y%m%d%H%M%S")
-    
-    return '.'.join([str_version, str_bid])
+__version="11.0.1"
 
 def list_recursive(app, directory, extension="*"):
     """
@@ -34,12 +22,8 @@ def list_recursive(app, directory, extension="*"):
 
 included_packages = find_packages()
 
-MAJOR = 11
-MINOR = 0
-RELEASE = 0
-
 setup(name="oc_portal_commons",
-      version=dynamic_version('.'.join(list(map(lambda x: str(x), [MAJOR,MINOR, RELEASE])))),
+      version=__version,
       description="Common code, static files, settings and testing tools used at all portal variants",
       long_description="",
       long_description_content_type="text/plain",
@@ -53,12 +37,10 @@ setup(name="oc_portal_commons",
           "fs",
           "mock"
       ],
-
       packages=included_packages,
       package_data={
           "oc_portal_commons": (list_recursive("oc_portal_commons", "templates")
                              + list_recursive("oc_portal_commons", "static")),
       },
-
-      test_suite="portal_commons.test.runtests.execute_test_suite",
+      test_suite="oc_portal_commons.test.runtests.execute_test_suite",
       )
