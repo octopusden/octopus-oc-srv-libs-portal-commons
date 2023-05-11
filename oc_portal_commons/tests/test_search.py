@@ -28,7 +28,7 @@ class DeliverySearchTestCase(test.TestCase):
                           comment="weird comment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
-                              "com.example.app:distribution:2.2.2:zip",
+                              "com.example.app:somedstr:2.2.2:zip",
                               "com.example.app.branches-int.apps:distribution:2.6.684-22:war",
                               "com.example.app:distribution:1.0.93:war",
                               ])
@@ -37,9 +37,10 @@ class DeliverySearchTestCase(test.TestCase):
                           comment="specificcomment",
                           fl=["/tmp/work/data",
                               "some file with spaces",
-                              "com.example.app:distribution:2.2.2:zip",
+                              "com.example.app:othdstr:2.2.2:zip",
                               "com.example.app.branches-int.apps:distribution:2.6.684-22:war",
                               "com.example.app:distribution:1.0.93:war",
+                              "  "
                               ])
         # 3:
         self.add_delivery(a="TEST-3", v="0.0.3",
@@ -229,7 +230,7 @@ class DeliveryNameSearchTestSuite(DeliverySearchTestCase):
         filtered = self.search_deliveries(project="TEST-test-v202301")
         self.assert_filtered([12, 13], filtered)
 
-    def _est_delivery_version_search(self):
+    def test_delivery_version_search(self):
         Delivery.objects.all().delete()
         self.add_delivery(a="TEST-test", v="v20230101")  # 12
         self.add_delivery(a="TEST-test", v="v20230102")  # 13
@@ -332,22 +333,22 @@ class CommentSearchTestSuite(DeliverySearchTestCase):
 
 class ContentSearchTestSuite(DeliverySearchTestCase):
 
-    def _est_svn_file_found(self):
-        filtered = self.search_deliveries(component_0="FILE",
-                                          component_1="cards/wrap.txt")
-        self.assert_filtered([0, 2], filtered)
+    def test_svn_file_found(self):
+        filtered = self.search_deliveries(component_0="SQL",
+                                          component_1="something.sql")
+        self.assert_filtered([4], filtered)
 
-    def _est_svn_file_beginning_found(self):
-        filtered = self.search_deliveries(component_0="FILE",
-                                          component_1="cards")
-        self.assert_filtered([0, 1, 2], filtered)
+    def test_svn_file_beginning_found(self):
+        filtered = self.search_deliveries(component_0="SQL",
+                                          component_1="some")
+        self.assert_filtered([4], filtered)
 
-    def _est_spaces_are_processed(self):
+    def test_spaces_are_processed(self):
         filtered = self.search_deliveries(component_0="FILE",
                                           component_1="some file")
-        self.assert_filtered([1, ], filtered)
+        self.assert_filtered([1, 2, 3, 5, 6, 7, 8, 9, 10, 11], filtered)
 
-    def _est_only_spaces_given(self):
+    def test_only_spaces_given(self):
         filtered = self.search_deliveries(component_0="FILE",
                                           component_1="  ")
         self.assert_filtered([2, ], filtered)
@@ -355,80 +356,19 @@ class ContentSearchTestSuite(DeliverySearchTestCase):
 
 class ComponentSearchTestSuite(DeliverySearchTestCase):
 
-    def _est_all_ts_found(self):
-        self.assert_filtered([3, 4], self.search_component_deliveries("TSDSTR"))
+    def test_all_sql_found(self):
+        self.assert_filtered([4], self.search_component_deliveries("SQL"))
 
-    def _est_all_ns_found(self):
-        self.assert_filtered([2, 4], self.search_component_deliveries("NSDSTRCLIENT"))
+    def test_all_somedstr_found(self):
+        self.maxDiff = None
+        self.assert_filtered([1], self.search_component_deliveries("SOMEDSTR"))
 
-    def _est_all_smsb_found(self):
-        self.assert_filtered([1, 3, 5], self.search_component_deliveries("SMSBDSTR"))
+    def test_all_othdstr_found(self):
+        self.maxDiff = None
+        self.assert_filtered([2], self.search_component_deliveries("OTHDSTR"))
 
-    def _est_all_ws_found(self):
-        self.assert_filtered([4, 5, 6], self.search_component_deliveries("WSDSTRCLIENT"))
-
-    def _est_all_mwb_found(self):
-        self.assert_filtered([3], self.search_component_deliveries("MWBDSTRCLIENT"))
-
-    def _est_all_schedulers_found(self):
-        self.assert_filtered([4, ], self.search_component_deliveries("SCHDSTR"))
-
-    def _est_all_appservers_found(self):
-        self.assert_filtered([5, ], self.search_component_deliveries("APPSRVDSTR"))
-
-    def _est_all_w4g_found(self):
-        self.assert_filtered([1, 2, ], self.search_component_deliveries("W4GDSTR"))
-
-    def _est_all_cp_found(self):
-        filtered = self.search_deliveries(component_0="CPBDSTR",
-                                          component_1="")
-        self.assert_filtered([3, 5, ], filtered)
-        self.assert_filtered([3, 5], self.search_component_deliveries("CPBDSTR"))
-
-    def _est_all_mpi_found(self):
-        self.assert_filtered([5, ], self.search_component_deliveries("MPIDSTR"))
-
-    def _est_all_acs_found(self):
-        self.assert_filtered([1, ], self.search_component_deliveries("ACSDSTR"))
-
-    def _est_all_egw_found(self):
-        # if egwapp belongs to egw, then include 4
-        self.assert_filtered([3, ], self.search_component_deliveries("EGWDSTR"))
-
-    def _est_all_egwapp_found(self):
-        self.assert_filtered([4, ], self.search_component_deliveries("EGWAPPDSTR"))
-
-    def _est_all_as_found(self):
-        self.assert_filtered([5, ], self.search_component_deliveries("ACCSRVDSTR"))
-
-    def _est_type_and_version_beginning(self):
-        filtered = self.search_deliveries(component_0="SMSBDSTR",
-                                          component_1="2.8.52", )
-        self.assert_filtered([1, 5], filtered)
-
-    def _est_missing_component_processed(self):
+    def test_missing_component_processed(self):
         self.assert_filtered([], self.search_component_deliveries("WRONG"))
-
-    def _est_all_redis_found(self):
-        self.assert_filtered([8, 11, ], self.search_component_deliveries("REDISDSTR"))
-
-    def _est_all_demob_found(self):
-        self.assert_filtered([7, ], self.search_component_deliveries("DEMOBDSTR"))
-
-    def _est_all_epin_found(self):
-        self.assert_filtered([7, ], self.search_component_deliveries("EPINDSTR"))
-
-    def _est_all_epinapp_found(self):
-        self.assert_filtered([9, 10, ], self.search_component_deliveries("EPINAPPDSTR"))
-
-    def _est_all_pind_found(self):
-        self.assert_filtered([5, ], self.search_component_deliveries("PINDDSTR"))
-
-    def _est_all_pindapp_found(self):
-        self.assert_filtered([7, ], self.search_component_deliveries("PINDAPPDSTR"))
-
-    def _est_all_paysrv_found(self):
-        self.assert_filtered([11, ], self.search_component_deliveries("PAYSRVDSTR"))
 
 
 class GroupSearchTestSuite(DeliverySearchTestCase):
@@ -451,7 +391,7 @@ class GroupSearchTestSuite(DeliverySearchTestCase):
 
         self.assert_filtered([], self.search_component_deliveries("TEST"))
 
-    def _est_group_components_found(self):
+    def test_group_components_found(self):
         citype1, _ = CiTypes.objects.get_or_create(code="test1", name="test1")
         citype2, _ = CiTypes.objects.get_or_create(code="test2", name="test2")
         citype3, _ = CiTypes.objects.get_or_create(code="test3", name="test3")

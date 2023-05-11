@@ -109,6 +109,8 @@ def fill_dict( o_apps = None, o_sched = None ):
 
     check_create_CI_TYPES( { "code":"FILE", "name":"Any regular file", "is_standard":"N" } )
     check_create_CI_TYPES( { "code":"SQL", "name":"Any sql file", "is_standard":"N" } )
+    check_create_CI_TYPES( { "code":"SOMEDSTR", "name":"Some distribution", "is_standard":"Y" } )
+    check_create_CI_TYPES( { "code":"OTHDSTR", "name":"Some other distribution", "is_standard":"Y" } )
 
     # groups:
     check_create_CI_TYPE_GROUPS( { "code":"FILE", "name" : "General Files" } )
@@ -134,6 +136,8 @@ def fill_dict( o_apps = None, o_sched = None ):
     check_create_CI_REGEXP=lambda *args: check_create_app_CI_REGEXP(o_apps, *args)
     check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"FILE", "regexp": ".+:zip$" } )
     check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"SQL", "regexp": ".+sql" } )
+    check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"SOMEDSTR", "regexp": ".+somedstr.+" } )
+    check_create_CI_REGEXP( { "loc_type":"NXS", "ci_type":"OTHDSTR", "regexp": ".+othdstr.+" } )
     return
 
 def main():
