@@ -13,7 +13,7 @@ def get_portal_app_urls(app_name):
 
 
 urlpatterns = [
-    url(r'^accounts/', include('django.contrib.auth.urls', namespace='accounts')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
 ]
 
 handler404 = "portal_commons.views_errors.http404"
