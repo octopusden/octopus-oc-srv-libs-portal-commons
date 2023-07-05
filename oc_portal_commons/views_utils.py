@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from oc_delivery_apps.dlmanager.models import Delivery, JiraProjects, JiraInstances
 
 
-from oc_portal_commons.forms import DeliveryFormFilter
+from .forms import DeliveryFormFilter
 
 import re
 
