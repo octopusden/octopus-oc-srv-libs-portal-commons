@@ -3,10 +3,10 @@ from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.views import generic
 from django.utils.safestring import mark_safe
-from dlmanager.models import Delivery, JiraProjects, JiraInstances
+from oc_delivery_apps.dlmanager.models import Delivery, JiraProjects, JiraInstances
 
 
-from portal_commons.forms import DeliveryFormFilter
+from oc_portal_commons.forms import DeliveryFormFilter
 
 import re
 
