@@ -7,8 +7,8 @@ def get_portal_app_urls(app_name):
     # redirect both explicit "dl" and default url
     app_urls = "%s.urls" % app_name
     return [
-        url(r'^$', include(app_urls, namespace='dlmanager')),
-        url(r'^dl/', include(app_urls, namespace='dlmanager')),
+        url(r'^$', include(app_urls)),
+        url(r'^dl/', include(app_urls)),
     ]
 
 

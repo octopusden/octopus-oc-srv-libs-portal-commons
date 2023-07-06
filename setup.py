@@ -6,7 +6,7 @@ import sys
 from setuptools import setup
 from setuptools import find_packages
 
-__version = "11.0.3"
+__version = "11.0.4"
 
 def list_recursive(app, directory, extension="*"):
     """
