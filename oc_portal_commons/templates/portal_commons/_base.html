@@ -68,7 +68,7 @@
       {% block breadcrumbs %}
       <div class="breadcrumbs">
 	<a href="{% url 'dlmanager:index' %}">[{% trans 'Home' %}]</a>
-	<a href="{% url 'dlmanager:index' %}dl/netserver_log/">[{% trans 'NetServer ChangeLog' %}]</a>
+	<a href="{% url 'dlmanager:index' %}dl/ns_log/">[{% trans 'NS ChangeLog' %}]</a>
 	{% if title %} &rsaquo; {{ title }}{% endif %}
       </div>
       {% endblock %}
